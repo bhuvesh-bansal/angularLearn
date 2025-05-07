@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Todoo } from '../model/todo.type';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -24,5 +24,10 @@ export class TodosService {
 
   deleteTodo(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  deleteAllTodos(ids: number[]): Observable<void[]> {
+    const deleteRequests = ids.map(id => this.deleteTodo(id));
+    return forkJoin(deleteRequests);
   }
 }

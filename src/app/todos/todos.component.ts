@@ -20,6 +20,7 @@ export class TodosComponent implements OnInit {
   searchTerm = signal('');
   showAddTodoForm = false;
   newTodoTitle = '';
+  isDeleting = false;
 
   ngOnInit(): void {
     this.loadTodos();
@@ -88,6 +89,27 @@ export class TodosComponent implements OnInit {
       })
     ).subscribe(() => {
       this.todoItems.update(todos => todos.filter(todo => todo.id !== todoItem.id));
+    });
+  }
+
+  deleteAllTodos(): void {
+    if (!confirm('Are you sure you want to delete all todos?')) return;
+
+    const todos = this.todoItems();
+    if (todos.length === 0) return;
+
+    this.isDeleting = true;
+    const todoIds = todos.map(todo => todo.id);
+
+    this.todoService.deleteAllTodos(todoIds).pipe(
+      catchError((error) => {
+        console.log('Error deleting all todos', error);
+        this.isDeleting = false;
+        throw error;
+      })
+    ).subscribe(() => {
+      this.todoItems.set([]);
+      this.isDeleting = false;
     });
   }
 }
