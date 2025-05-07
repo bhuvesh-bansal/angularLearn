@@ -1,13 +1,67 @@
-<h3>Todos List </h3>
-@if(!todoItems().length){
-    <p>Loading...</p>
-}
-<form>
-    <label>Filter Todos</label>
-<input name="searchTerm" [(ngModel)]="searchTerm" placeholder="Search Todos" >
-</form>
-<ul class = "todos">
-    @for (todo of todoItems() | filterTodos : searchTerm() ; track todo.id){
-        <app-todo-item (todoToggled)="updateTodoItem($event)" [todo]="todo"/>
+<div class="todos-container container">
+    <header class="todos-header">
+        <h1>Todos List</h1>
+        <div class="todo-actions">
+            <form class="search-form">
+                <div class="input-group">
+                    <input 
+                        name="searchTerm" 
+                        [(ngModel)]="searchTerm" 
+                        placeholder="Search todos..." 
+                        class="search-input"
+                    >
+                </div>
+            </form>
+            <button class="btn btn-primary add-todo-btn" (click)="showAddTodoForm = true">
+                Add New Task
+            </button>
+        </div>
+    </header>
+
+    <!-- Add Todo Form -->
+    @if(showAddTodoForm){
+    <div class="add-todo-form">
+        <form (ngSubmit)="addTodo()" #todoForm="ngForm">
+            <div class="form-group">
+                <input 
+                    type="text" 
+                    name="newTodoTitle"
+                    [(ngModel)]="newTodoTitle"
+                    placeholder="What needs to be done?"
+                    required
+                    class="todo-input"
+                    #titleInput="ngModel"
+                >
+                @if(titleInput.invalid && titleInput.touched){
+                    <small class="error-message">Task title is required</small>
+                }
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary" [disabled]="todoForm.invalid">
+                    Add Task
+                </button>
+                <button type="button" class="btn btn-secondary" (click)="showAddTodoForm = false">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
     }
-</ul>
+
+    @if(!todoItems().length){
+        <div class="loading-state">
+            <p>Loading...</p>
+        </div>
+    }
+
+    <ul class="todos-list">
+        @for (todo of todoItems() | filterTodos : searchTerm() ; track todo.id){
+            <app-todo-item 
+                (todoToggled)="updateTodoItem($event)"
+                (todoDeleted)="deleteTodoItem($event)"
+                [todo]="todo"
+                class="slide-in"
+            />
+        }
+    </ul>
+</div>

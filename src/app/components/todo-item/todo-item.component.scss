@@ -1,0 +1,104 @@
+.todo-item {
+  background-color: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .todo-content {
+    padding: var(--spacing-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex: 1;
+  }
+
+  .todo-checkbox {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--gray-300);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+
+    &:checked {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+
+      &::after {
+        content: '✓';
+        position: absolute;
+        color: white;
+        font-size: 14px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    &:hover {
+      border-color: var(--primary-color);
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.1);
+    }
+  }
+
+  .todo-label {
+    font-size: 1rem;
+    color: var(--text-color);
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.2s ease;
+  }
+
+  .delete-btn {
+    background: none;
+    border: none;
+    padding: var(--spacing-xs);
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.2s ease;
+    color: #dc3545;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: var(--spacing-sm);
+
+    .delete-icon {
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+
+    &:hover {
+      background-color: rgba(220, 53, 69, 0.1);
+    }
+  }
+
+  &:hover .delete-btn {
+    opacity: 1;
+  }
+
+  &[appHighlightCompletedTodo][isCompleted="true"] {
+    .todo-label {
+      color: var(--gray-300);
+      text-decoration: line-through;
+    }
+  }
+}

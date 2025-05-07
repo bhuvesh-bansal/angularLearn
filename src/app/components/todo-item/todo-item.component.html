@@ -1,4 +1,23 @@
-<li appHighlightCompletedTodo [isCompleted] ="todo().completed" (change)=" this.todoClicked()" class = "todos__item">
-    <input id = "todo-{{todo().id}}" type="checkbox" [checked]="todo().completed" /> 
-    <label for = "todo-{{todo().id}}">{{todo().title | uppercase }}</label>
+<li 
+    class="todo-item"
+    appHighlightCompletedTodo 
+    [isCompleted]="todoSignal().completed"
+    (change)="todoClicked()"
+>
+    <div class="todo-content">
+        <div class="checkbox-wrapper">
+            <input 
+                type="checkbox" 
+                [id]="'todo-' + todoSignal().id"
+                [checked]="todoSignal().completed"
+                class="todo-checkbox"
+            />
+            <label [for]="'todo-' + todoSignal().id" class="todo-label">
+                {{todoSignal().title | uppercase}}
+            </label>
+        </div>
+        <button class="delete-btn" (click)="deleteTodo()">
+            <span class="delete-icon">×</span>
+        </button>
+    </div>
 </li>

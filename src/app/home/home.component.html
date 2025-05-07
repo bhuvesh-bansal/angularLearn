@@ -1,3 +1,36 @@
-<app-greeting [message]="hmessage" />
-<app-counter/>
-<input placeholder="Input here" type="text" (keyup)="keyUpHandler($event)" />
+<div class="home-container container">
+    <section class="hero">
+        <h1>Welcome to Task Manager</h1>
+        <p class="subtitle">Organize your tasks efficiently and boost your productivity</p>
+        <div class="cta-buttons">
+            <a routerLink="/todos" class="btn btn-primary">Get Started</a>
+            <a href="https://angular.dev" target="_blank" class="btn btn-secondary">Learn More</a>
+        </div>
+    </section>
+
+    <section class="features">
+        <h2>Key Features</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📝</div>
+                <h3>Task Management</h3>
+                <p>Create, organize, and track your tasks with ease</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔍</div>
+                <h3>Quick Search</h3>
+                <p>Find your tasks instantly with powerful search</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">✨</div>
+                <h3>Clean Interface</h3>
+                <p>Modern and intuitive design for better productivity</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>Responsive</h3>
+                <p>Works seamlessly on all your devices</p>
+            </div>
+        </div>
+    </section>
+</div>

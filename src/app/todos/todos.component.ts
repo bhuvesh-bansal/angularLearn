@@ -9,35 +9,85 @@ import { FilterTodosPipe } from '../pipes/filter-todos.pipe';
 
 @Component({
   selector: 'app-todos',
-  imports: [TodoItemComponent,FormsModule,FilterTodosPipe],
+  standalone: true,
+  imports: [NgIf, TodoItemComponent, FormsModule, FilterTodosPipe],
   templateUrl: './todos.component.html',
   styleUrl: './todos.component.scss'
 })
 export class TodosComponent implements OnInit {
-todoService = inject(TodosService);
-todoItems = signal<Array<Todoo>>([]);
-searchTerm = signal('');
+  private todoService = inject(TodosService);
+  todoItems = signal<Array<Todoo>>([]);
+  searchTerm = signal('');
+  showAddTodoForm = false;
+  newTodoTitle = '';
 
-ngOnInit(): void {
-    this.todoService.getTodosFromApi().pipe(catchError((error)=> {
-      console.log('Error Occured', error);
-      throw error;
-    })).subscribe((todos) => {
+  ngOnInit(): void {
+    this.loadTodos();
+  }
+
+  loadTodos(): void {
+    this.todoService.getTodosFromApi().pipe(
+      catchError((error) => {
+        console.log('Error Occurred', error);
+        throw error;
+      })
+    ).subscribe((todos) => {
       this.todoItems.set(todos);
     });
-}
+  }
 
-updateTodoItem(todoItem: Todoo) {
-  this.todoItems.update((todos) => {
-    return todos.map((todo) => {
-      if (todo.id === todoItem.id) {
-        return {
-          ...todo,
-          completed: !todo.completed,
-        };
-      }
-      return todo;
+  addTodo(): void {
+    if (!this.newTodoTitle.trim()) return;
+
+    const newTodo: Partial<Todoo> = {
+      title: this.newTodoTitle,
+      completed: false,
+      userId: 1 // Using a default userId
+    };
+
+    this.todoService.createTodo(newTodo).pipe(
+      catchError((error) => {
+        console.log('Error creating todo', error);
+        throw error;
+      })
+    ).subscribe((todo) => {
+      this.todoItems.update(todos => [todo, ...todos]);
+      this.newTodoTitle = '';
+      this.showAddTodoForm = false;
     });
-  });
-}
+  }
+
+  updateTodoItem(todoItem: Todoo): void {
+    const updatedTodo = {
+      ...todoItem,
+      completed: !todoItem.completed
+    };
+
+    this.todoService.updateTodo(updatedTodo).pipe(
+      catchError((error) => {
+        console.log('Error updating todo', error);
+        throw error;
+      })
+    ).subscribe(() => {
+      this.todoItems.update((todos) => {
+        return todos.map((todo) => {
+          if (todo.id === todoItem.id) {
+            return updatedTodo;
+          }
+          return todo;
+        });
+      });
+    });
+  }
+
+  deleteTodoItem(todoItem: Todoo): void {
+    this.todoService.deleteTodo(todoItem.id).pipe(
+      catchError((error) => {
+        console.log('Error deleting todo', error);
+        throw error;
+      })
+    ).subscribe(() => {
+      this.todoItems.update(todos => todos.filter(todo => todo.id !== todoItem.id));
+    });
+  }
 }

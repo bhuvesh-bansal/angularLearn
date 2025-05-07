@@ -1,8 +1,15 @@
-<header>
-    <nav>
-        <span routerLink="/">{{title}}</span>
-        <ul>
-            <li routerLink="/todos">Todos</li>
+<header class="header">
+    <nav class="container">
+        <div class="logo">
+            <span routerLink="/" class="brand">{{title}}</span>
+        </div>
+        <ul class="nav-links">
+            <li>
+                <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+            </li>
+            <li>
+                <a routerLink="/todos" routerLinkActive="active">Todos</a>
+            </li>
         </ul>
     </nav>
 </header>

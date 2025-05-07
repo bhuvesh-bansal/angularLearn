@@ -4,20 +4,29 @@ import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet,HeaderComponent],
+  standalone: true,
+  imports: [RouterOutlet, HeaderComponent],
   template: `
-    <app-header/>
-    <main>
-      <router-outlet/>
-</main>
-
+    <div class="app-wrapper">
+      <app-header/>
+      <main class="main-content">
+        <router-outlet/>
+      </main>
+    </div>
   `,
   styles: [`
-    main{
-      padding : 16px;
-      
+    .app-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
-    `],
+
+    .main-content {
+      flex: 1;
+      padding: var(--spacing-md);
+      background-color: var(--background-color);
+    }
+  `],
 })
 export class AppComponent {
   title = 'first-ng-app';
